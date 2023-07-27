@@ -1,0 +1,22 @@
+<div class="row px-3 py-3">
+        <div class="col">
+                <form (ngSubmit)="onSubmit()">
+                        <div class="form-group py-3">
+                                <label for="locationDropdown">Choose a Force</label>
+                                <select name="locationDropdown" id="locationDropdown" [ngModel] (ngModelChange)="forceSelected($event)"
+                                        class="form-control">
+                                        <option id="forceOption" [value]="force.id" *ngFor="let force of forces; let i = index">{{force.name}}</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                                <label for="locationDropdown">Choose a Neighbourhood</label>
+                                <select name="locationDropdown" id="locationDropdown"
+                                        class="form-control">
+                                        <option value="">Please choose from the list.</option>
+                                        <option *ngFor="let hood of hoods; let i = index">{{hood.name}}</option>
+                                </select>
+                        </div>
+                </form>
+
+        </div>
+</div>
