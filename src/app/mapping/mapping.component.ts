@@ -10,6 +10,17 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class MappingComponent {
 
+
+  center: google.maps.LatLngLiteral = {lat:53.48095,lng:-2.23743}
+  zoom = 6;
+
+  markerOptions: google.maps.MarkerOptions = {draggable: false};
+  markerPositions: google.maps.LatLngLiteral[] = [];
+
+  
+
+   
+
   apiLoaded: Observable<boolean>;
 
   constructor(httpClient: HttpClient) {
