@@ -6,6 +6,7 @@ import { tap } from 'rxjs';
 import { Neighbourhood } from '../response_models/neighbourhood/neighbourhood.model';
 import { NeighbourhoodService } from '../response_models/neighbourhood/neighbourhood.service';
 import { StopAndSearchForce } from '../response_models/stop_and_search/force/stop_and_search_force.model';
+import { StopAndSearchForceService } from '../response_models/stop_and_search/force/stop-and-search-force.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class DataService {
 
   constructor(private httpClient: HttpClient, 
               private forceService: ForceService,
-              private hoodService: NeighbourhoodService) { }
+              private hoodService: NeighbourhoodService,
+              private stopAndSearchForceService: StopAndSearchForceService) { }
 
 
 
@@ -44,7 +46,13 @@ export class DataService {
     params=params.append('force', force);
     params=params.append('date', date);
 
-    return this.httpClient.get<StopAndSearchForce[]>
+    return this.httpClient.get<StopAndSearchForce[]>('https://data.police.uk/api/stops-force',{params:params}).pipe(
+      tap(
+        response=>{
+          this.stopAndSearchForceService.setStopAndSearchsForce(response);
+        }
+      )
+    )
  
   }
 

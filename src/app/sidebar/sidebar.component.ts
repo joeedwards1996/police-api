@@ -5,6 +5,8 @@ import { Force } from '../response_models/force.model';
 import { ForceService } from '../response_models/force.service';
 import { Neighbourhood } from '../response_models/neighbourhood/neighbourhood.model';
 import { NeighbourhoodService } from '../response_models/neighbourhood/neighbourhood.service';
+import { StopAndSearchForceService } from '../response_models/stop_and_search/force/stop-and-search-force.service';
+import { StopAndSearchForce } from '../response_models/stop_and_search/force/stop_and_search_force.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,9 +21,14 @@ export class SidebarComponent implements OnInit, OnDestroy{
   hoods: Neighbourhood[] = [];
   hoodSub!: Subscription;
 
+  stopAndSearchForces: StopAndSearchForce[] = [];
+
+  forceSelectedOption = "";
+
   constructor(private forceService: ForceService,
               private neighbourhoodService: NeighbourhoodService,
-              private dataService: DataService){}
+              private dataService: DataService,
+              private stopAndSearchForceService: StopAndSearchForceService){}
 
 
 
@@ -51,6 +58,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   forceSelected(value: string){
     console.log(value)
+    this.forceSelectedOption = value;
 
     this.dataService.getHoods(value).subscribe();
 
@@ -61,6 +69,22 @@ export class SidebarComponent implements OnInit, OnDestroy{
     )
     this.hoods = this.neighbourhoodService.getNeighbourhoods();
 
+  }
+
+  onTestClick(){
+
+    console.log(this.forceSelectedOption)
+
+    this.dataService.getStopAndSearchForce(this.forceSelectedOption,'2022-01').subscribe();
+
+
+    let stopAndSeachSub: Subscription = this.stopAndSearchForceService.StopAndSearchForceChanged.subscribe(
+      (response: StopAndSearchForce[])=>{
+        this.stopAndSearchForces = response;
+        console.log(response)
+      }
+    )
+    this.stopAndSearchForces = this.stopAndSearchForceService.getStopAndSearchsForce();
 
 
   }
