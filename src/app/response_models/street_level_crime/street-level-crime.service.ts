@@ -26,4 +26,16 @@ export class StreetLevelCrimeService {
     return this.streetLevelCrimes.slice();
   }
 
+
+  getStreetLevelCrimeLocations(){
+    let locations: Location[] = []
+    this.streetLevelCrimes.forEach(item=>{
+      //locations.push(item.location)
+    })
+  }
+
+  getStreetLevelCrimeWithLocations(){
+
+  }
+
 }
