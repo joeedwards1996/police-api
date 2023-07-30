@@ -10,6 +10,7 @@ import { StopAndSearchForce } from '../response_models/stop_and_search/force/sto
 import { MappingService } from '../mapping/mapping.service';
 import { AvailabilityService } from '../response_models/availability/availability.service';
 import { Availability } from '../response_models/availability/availabiliy.model';
+import { SidebarService } from './sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -36,12 +37,15 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   forceSelectedOption = "";
 
+  serviceOptionSelected: number = 0;
+
   constructor(private forceService: ForceService,
               private neighbourhoodService: NeighbourhoodService,
               private dataService: DataService,
               private stopAndSearchForceService: StopAndSearchForceService,
               private mappingService: MappingService,
-              private availabilitiesService: AvailabilityService){}
+              private availabilitiesService: AvailabilityService,
+              private sidebarService: SidebarService){}
 
 
 
@@ -94,7 +98,9 @@ export class SidebarComponent implements OnInit, OnDestroy{
     console.log("Form Submitted")
   }
 
-  serviceOptionSelected(value: string){
+  onServiceOptionSelected(value: string){
+    this.serviceOptionSelected = +value; 
+    console.log(value)
 
   }
 
@@ -118,6 +124,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
   availabilityDateSelected(value: number){
     this.selectedDate = value;
     this.forceAvailabilities = this.availabilities[this.selectedDate].stop_and_search.slice();
+    this.sidebarService.setDate(this.dates[value]);
     
 
   }

@@ -9,6 +9,8 @@ import { StopAndSearchForce } from '../response_models/stop_and_search/force/sto
 import { StopAndSearchForceService } from '../response_models/stop_and_search/force/stop-and-search-force.service';
 import { AvailabilityService } from '../response_models/availability/availability.service';
 import { JsonService } from './json.service';
+import { StreetLevelCrimeService } from '../response_models/street_level_crime/street-level-crime.service';
+import { StreetLevelCrime } from '../response_models/street_level_crime/street_level_crime.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,8 @@ export class DataService {
               private hoodService: NeighbourhoodService,
               private stopAndSearchForceService: StopAndSearchForceService,
               private availabilitiesService: AvailabilityService,
-              private jsonService:JsonService) { }
+              private jsonService:JsonService,
+              private streetLevelCrimeService: StreetLevelCrimeService) { }
 
 
 
@@ -66,6 +69,24 @@ export class DataService {
       )
     )
  
+  }
+
+
+  getStreetLevelCrimes(date:string, lat: number, lng: number){
+
+    let params = new HttpParams();
+    params = params.append('lat', lat);
+    params = params.append('lng', lng);
+    params = params.append('date', date)
+
+    return this.httpClient.get<StreetLevelCrime[]>('https://data.police.uk/api/crimes-street/all-crime', {params: params}).pipe(
+      tap(
+        response=>{
+          this.streetLevelCrimeService.setStreetLevelCrimes(response);
+        }
+      )
+    );
+
   }
 
 

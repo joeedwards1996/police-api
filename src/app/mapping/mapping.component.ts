@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { MappingService } from './mapping.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ModalComponent } from './modal/modal.component';
+import { DataService } from '../shared/data.service';
+import { SidebarService } from '../sidebar/sidebar.service';
 
 @Component({
   selector: 'app-mapping',
@@ -23,12 +25,16 @@ export class MappingComponent implements OnInit{
   markerPositions: google.maps.LatLngLiteral[] = [];
 
   
-
+  date: string = "";
    
 
   apiLoaded: Observable<boolean>;
 
-  constructor(httpClient: HttpClient, private mappingService: MappingService, private modalService: MdbModalService) {
+  constructor(httpClient: HttpClient, 
+              private mappingService: MappingService, 
+              private modalService: MdbModalService,
+              private dataService: DataService,
+              private sidebarService: SidebarService) {
     // If you're using the `<map-heatmap-layer>` directive, you also have to include the `visualization` library 
     // when loading the Google Maps API. To do so, you can add `&libraries=visualization` to the script URL:
     // https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization
@@ -47,12 +53,37 @@ export class MappingComponent implements OnInit{
       this.markerPositions = response;
     })
 
+    let dateSub: Subscription;
+    dateSub = this.sidebarService.dateChanged.subscribe((res:string)=>{
+      this.date = res;
+    })
+
 
   }
 
 
   onMapClick(event: google.maps.MapMouseEvent){
     console.log(event.latLng?.toJSON())
+
+    let latLng = event.latLng?.toJSON();
+
+    let lat = latLng?.lat;
+    let lng = latLng?.lng;
+
+    if (lat !== undefined && lng !== undefined){
+      this.dataService.getStreetLevelCrimes(this.date, lat, lng).subscribe(res=>{
+        console.log(res)
+      })
+    }
+
+    
+
+    
+
+    
+
+
+
   }
 
   onMarkerClick(value: number){
