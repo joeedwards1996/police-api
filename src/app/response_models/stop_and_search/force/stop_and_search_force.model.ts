@@ -1,10 +1,10 @@
 class Location {
 
-    latitude: string;
+    latitude: number;
     street: {id:string; name:string};
-    longitude: string;
+    longitude: number;
 
-    constructor(lattitude:string, street:{id: string; name:string}, longitude: string){
+    constructor(lattitude:number, street:{id: string; name:string}, longitude: number){
         this.latitude = lattitude;
         this.street = street;
         this.longitude = longitude;

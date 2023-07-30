@@ -7,6 +7,9 @@ import { Neighbourhood } from '../response_models/neighbourhood/neighbourhood.mo
 import { NeighbourhoodService } from '../response_models/neighbourhood/neighbourhood.service';
 import { StopAndSearchForceService } from '../response_models/stop_and_search/force/stop-and-search-force.service';
 import { StopAndSearchForce } from '../response_models/stop_and_search/force/stop_and_search_force.model';
+import { MappingService } from '../mapping/mapping.service';
+import { AvailabilityService } from '../response_models/availability/availability.service';
+import { Availability } from '../response_models/availability/availabiliy.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,6 +21,14 @@ export class SidebarComponent implements OnInit, OnDestroy{
   forces: Force[] = [];
   forceSub!: Subscription;
 
+  availabilities: Availability[] = [];
+  availabilitiesSub!: Subscription;
+
+  dates: string[] = [];
+  selectedDate: number = 0;
+  forceAvailabilities: string[] = [];
+  forceAvailabilitySelectedOption: string = "";
+
   hoods: Neighbourhood[] = [];
   hoodSub!: Subscription;
 
@@ -28,7 +39,9 @@ export class SidebarComponent implements OnInit, OnDestroy{
   constructor(private forceService: ForceService,
               private neighbourhoodService: NeighbourhoodService,
               private dataService: DataService,
-              private stopAndSearchForceService: StopAndSearchForceService){}
+              private stopAndSearchForceService: StopAndSearchForceService,
+              private mappingService: MappingService,
+              private availabilitiesService: AvailabilityService){}
 
 
 
@@ -42,6 +55,32 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
     );
     this.forces = this.forceService.getForces();
+
+
+
+    //getting the availabilities 
+    this.availabilitiesSub = this.availabilitiesService.availabilityChanged.subscribe(
+      (availabilities: Availability[])=>{
+
+        this.availabilities = availabilities;
+        console.log(availabilities);
+
+        this.availabilities.forEach(item=>{
+          this.dates.push(item.date)
+        })
+
+        this.forceAvailabilities = this.availabilities[this.selectedDate].stop_and_search.slice();
+
+        
+
+        
+
+        
+
+
+      }
+    );
+    this.availabilities = this.availabilitiesService.getAvailabilities();
     
 
   }
@@ -53,6 +92,10 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   onSubmit(){
     console.log("Form Submitted")
+  }
+
+  serviceOptionSelected(value: string){
+
   }
 
 
@@ -71,17 +114,34 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   }
 
+
+  availabilityDateSelected(value: number){
+    this.selectedDate = value;
+    this.forceAvailabilities = this.availabilities[this.selectedDate].stop_and_search.slice();
+    
+
+  }
+
+  forceAvailabilitySelected(value: string){
+    this.forceAvailabilitySelectedOption = value;
+    console.log(value)
+  }
+
+
+
   onTestClick(){
 
-    console.log(this.forceSelectedOption)
+    console.log(this.forceAvailabilitySelectedOption)
+    let date: string = this.dates[this.selectedDate]
 
-    this.dataService.getStopAndSearchForce(this.forceSelectedOption,'2022-01').subscribe();
+    this.dataService.getStopAndSearchForce(this.forceAvailabilitySelectedOption,date).subscribe();
 
 
     let stopAndSeachSub: Subscription = this.stopAndSearchForceService.StopAndSearchForceChanged.subscribe(
       (response: StopAndSearchForce[])=>{
         this.stopAndSearchForces = response;
         console.log(response)
+        this.mappingService.setMarkers(response);
       }
     )
     this.stopAndSearchForces = this.stopAndSearchForceService.getStopAndSearchsForce();

@@ -1,14 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { MappingService } from './mapping.service';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ModalComponent } from './modal/modal.component';
 
 @Component({
   selector: 'app-mapping',
   templateUrl: './mapping.component.html',
   styleUrls: ['./mapping.component.scss']
 })
-export class MappingComponent {
+export class MappingComponent implements OnInit{
+
+  modalRef: MdbModalRef<ModalComponent> | null = null;
 
 
   center: google.maps.LatLngLiteral = {lat:53.48095,lng:-2.23743}
@@ -23,7 +28,7 @@ export class MappingComponent {
 
   apiLoaded: Observable<boolean>;
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, private mappingService: MappingService, private modalService: MdbModalService) {
     // If you're using the `<map-heatmap-layer>` directive, you also have to include the `visualization` library 
     // when loading the Google Maps API. To do so, you can add `&libraries=visualization` to the script URL:
     // https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization
@@ -33,6 +38,27 @@ export class MappingComponent {
           map(() => true),
           catchError(() => of(false)),
         );
+  }
+
+
+  ngOnInit(): void {
+    
+    this.mappingService.markerPositionsChanged.subscribe((response)=>{
+      this.markerPositions = response;
+    })
+
+
+  }
+
+
+  onMapClick(event: google.maps.MapMouseEvent){
+    console.log(event.latLng?.toJSON())
+  }
+
+  onMarkerClick(value: number){
+    this.modalRef = this.modalService.open(ModalComponent, 
+      {modalClass: 'modal-dialog-centered modal-xl', data: {index: value}})
+    console.log(value)
   }
 
 }

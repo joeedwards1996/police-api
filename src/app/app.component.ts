@@ -21,6 +21,7 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     
     this.forcesSub = this.dataService.getForces().subscribe();
+    this.dataService.getAvailabilities().subscribe();
 
   }
 

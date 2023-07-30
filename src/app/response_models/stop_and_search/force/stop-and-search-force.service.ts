@@ -27,4 +27,8 @@ export class StopAndSearchForceService {
   getStopAndSearchForce(index:number){
     return this.stopAndSearchsForce[index];
   }
+
+
+  
+
 }

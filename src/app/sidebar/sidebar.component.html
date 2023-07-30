@@ -2,20 +2,41 @@
         <div class="col">
                 <form (ngSubmit)="onSubmit()">
                         <div class="form-group py-3">
+                                <label for="serviceDropdown">Choose a Service</label>
+                                <select name="serviceDropdown" id="serviceDropdown" [ngModel]="0" (ngModelChange)="serviceOptionSelected($event)" class="form-control">
+                                        <option id="stopAndSearchServiceOption" value="0">Stop and Search by Force</option>
+                                </select>
+                        </div>
+                        <!-- <div class="form-group py-3">
                                 <label for="locationDropdown">Choose a Force</label>
                                 <select name="locationDropdown" id="locationDropdown" [ngModel] (ngModelChange)="forceSelected($event)"
                                         class="form-control">
                                         <option id="forceOption" [value]="force.id" *ngFor="let force of forces; let i = index">{{force.name}}</option>
                                 </select>
+                        </div> -->
+                        <div class="form-group py-3">
+                                <label for="availabilityDateDropdown">Choose a Date</label>
+                                <select name="availabilityDateDropdown" id="availabilityDateDropdown" [ngModel]="selectedDate" (ngModelChange)="availabilityDateSelected($event)"
+                                        class="form-control">
+                                        <option [value]="i" id="dateOption" *ngFor="let date of dates; let i = index">{{date}}</option>
+                                </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group py-3">
+                                <label for="forceAvailabilityDropdown">Choose a Force</label>
+                                <select name="forceAvailabilityDropdown" id="forceAvailabilityDropdown" [ngModel]="forceAvailabilitySelectedOption" (ngModelChange)="forceAvailabilitySelected($event)"
+                                        class="form-control">
+                                        <option [value]="forceAvailability" *ngFor="let forceAvailability of forceAvailabilities; let i = index">{{forceAvailability}}</option>
+                                </select>
+                        </div>
+
+                        <!-- <div class="form-group">
                                 <label for="locationDropdown">Choose a Neighbourhood</label>
                                 <select name="locationDropdown" id="locationDropdown"
                                         class="form-control">
                                         <option value="">Please choose from the list.</option>
                                         <option *ngFor="let hood of hoods; let i = index">{{hood.name}}</option>
                                 </select>
-                        </div>
+                        </div> -->
                 </form>
                 <hr>
         

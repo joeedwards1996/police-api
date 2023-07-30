@@ -7,6 +7,8 @@ import { Neighbourhood } from '../response_models/neighbourhood/neighbourhood.mo
 import { NeighbourhoodService } from '../response_models/neighbourhood/neighbourhood.service';
 import { StopAndSearchForce } from '../response_models/stop_and_search/force/stop_and_search_force.model';
 import { StopAndSearchForceService } from '../response_models/stop_and_search/force/stop-and-search-force.service';
+import { AvailabilityService } from '../response_models/availability/availability.service';
+import { JsonService } from './json.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,9 @@ export class DataService {
   constructor(private httpClient: HttpClient, 
               private forceService: ForceService,
               private hoodService: NeighbourhoodService,
-              private stopAndSearchForceService: StopAndSearchForceService) { }
+              private stopAndSearchForceService: StopAndSearchForceService,
+              private availabilitiesService: AvailabilityService,
+              private jsonService:JsonService) { }
 
 
 
@@ -26,6 +30,14 @@ export class DataService {
     return this.httpClient.get<Force[]>('https://data.police.uk/api/forces').pipe(
       tap(forces =>{
         this.forceService.setForces(forces)
+      })
+    )
+  }
+
+  getAvailabilities(){
+    return this.httpClient.get<JSON[]>('https://data.police.uk/api/crimes-street-dates').pipe(
+      tap(availabilities=>{
+        this.jsonService.convertAvailabilities(availabilities);
       })
     )
   }
