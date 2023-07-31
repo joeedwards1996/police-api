@@ -18,7 +18,7 @@ export class StreetLevelCrime {
     public location_type: string; 
     public location: Location;
     public context: string; 
-    public outcome_status: OutcomeStatus;
+    public outcome_status: OutcomeStatus | null;
     public persistent_id: string; 
     public id: string; 
     public location_subtype: string; 
@@ -29,7 +29,7 @@ export class StreetLevelCrime {
                 location_type: string,
                 location: Location,
                 context: string, 
-                outcome_status: OutcomeStatus,
+                outcome_status: OutcomeStatus | null,
                 persistent_id: string, 
                 id: string, 
                 location_subtype: string, 
