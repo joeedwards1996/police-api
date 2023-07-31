@@ -25,22 +25,11 @@ export class MappingService {
 
 
 
-  setMarkers(stopAndSearchForces: StopAndSearchForce[]) {
+  setMarkers(markerPositions: google.maps.LatLngLiteral[]) {
 
     this.markerPositions = [];
+    this.markerPositions = markerPositions;
 
-    stopAndSearchForces.forEach((item: StopAndSearchForce) => {
-
-      
-      if (item.location != null) {
-        let location: google.maps.LatLngLiteral = {lat: +item.location.latitude, lng: +item.location.longitude}
-        this.markerPositions.push(location);
-
-        this.stopAndSearchForce.push(item)
-      }
-
-
-    })
     this.markerPositionsChanged.next(this.markerPositions.slice())
     console.log(this.markerPositions)
   }

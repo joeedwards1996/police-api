@@ -1,17 +1,5 @@
-class Location {
+import { Location } from "../../location.model";
 
-    latitude: number;
-    street: {id:string; name:string};
-    longitude: number;
-
-    constructor(lattitude:number, street:{id: string; name:string}, longitude: number){
-        this.latitude = lattitude;
-        this.street = street;
-        this.longitude = longitude;
-    }
-
-
-}
 
 export class StopAndSearchForce{
 

@@ -100,6 +100,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   onServiceOptionSelected(value: string){
     this.serviceOptionSelected = +value; 
+    this.sidebarService.setServiceOption(+value);
     console.log(value)
 
   }
@@ -147,8 +148,9 @@ export class SidebarComponent implements OnInit, OnDestroy{
     let stopAndSeachSub: Subscription = this.stopAndSearchForceService.StopAndSearchForceChanged.subscribe(
       (response: StopAndSearchForce[])=>{
         this.stopAndSearchForces = response;
+        let markerLocations = this.stopAndSearchForceService.getMarkerLocations();
         console.log(response)
-        this.mappingService.setMarkers(response);
+        this.mappingService.setMarkers(markerLocations);
       }
     )
     this.stopAndSearchForces = this.stopAndSearchForceService.getStopAndSearchsForce();

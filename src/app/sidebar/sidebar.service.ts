@@ -9,6 +9,9 @@ export class SidebarService {
   private date: string = "";
   dateChanged = new Subject<string>;
 
+  private serviceOptionSelected: number = 0;
+  serviceOptionChanged = new Subject<number>;
+
   constructor() { }
 
 
@@ -20,6 +23,16 @@ export class SidebarService {
 
   getDate(){
     return this.date;
+  }
+
+
+  setServiceOption(value: number){
+    this.serviceOptionSelected = value;
+    this.serviceOptionChanged.next(value);
+  }
+
+  getServiveOption(){
+    return this.serviceOptionSelected;
   }
 }
 

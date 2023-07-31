@@ -1,29 +1,24 @@
-class Location {
+import { Location } from "../location.model";
 
-    latitude: number;
-    street: {id:string; name:string};
-    longitude: number;
 
-    constructor(lattitude:number, street:{id: string; name:string}, longitude: number){
-        this.latitude = lattitude;
-        this.street = street;
-        this.longitude = longitude;
+class OutcomeStatus{
+    public category: string;
+    public date: string;
+
+    constructor(category: string, date: string){
+        this.category = category;
+        this.date = date;
     }
-
-
 }
 
 export class StreetLevelCrime {
-
-
-    
 
 
     public category: string; 
     public location_type: string; 
     public location: Location;
     public context: string; 
-    public outcome_status: string;
+    public outcome_status: OutcomeStatus;
     public persistent_id: string; 
     public id: string; 
     public location_subtype: string; 
@@ -34,7 +29,7 @@ export class StreetLevelCrime {
                 location_type: string,
                 location: Location,
                 context: string, 
-                outcome_status: string,
+                outcome_status: OutcomeStatus,
                 persistent_id: string, 
                 id: string, 
                 location_subtype: string, 
